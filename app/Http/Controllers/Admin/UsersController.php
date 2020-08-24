@@ -72,18 +72,38 @@ class UsersController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function edit($id) {
-    return view('admin.users.edit');
+    $user = User::findOrFail($id);
+    $roles = Role::pluck('name', 'id')->toArray();
+
+    return view('admin.users.edit',
+      compact('user', 'roles'));
   }
 
   /**
    * Update the specified resource in storage.
    *
-   * @param \Illuminate\Http\Request $request
+   * @param UsersRequest $request
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return void
    */
-  public function update(Request $request, $id) {
-    //
+  public function update(UsersRequest $request, $id) {
+    $user = User::findOrFail($id);
+    $input = $request->all();
+
+    if ($file = $request->file('photo')) {
+      $name = time() . $file->getClientOriginalName();
+      $file->move('images', $name);
+
+      $photo = Photo::create([
+        'file' => $name
+      ]);
+      $input['photo_id'] = $photo->id;
+    }
+
+    $input['password'] = bcrypt($request->password);
+
+    $user->update($input);
+    return redirect('/admin/users');
   }
 
   /**
