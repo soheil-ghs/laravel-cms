@@ -1,3 +1,7 @@
+body {
+  padding-top: 0 !important;
+}
+
 #admin-page {
   padding-top: 0;
 }

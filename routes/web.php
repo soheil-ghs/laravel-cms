@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 Auth::routes();
@@ -23,6 +23,10 @@ Route::get('/admin', function () {
   return view('admin.index');
 });
 
-Route::group(['as' => 'admin.'], function () {
+Route::group([
+  'as' => 'admin.',
+  'middleware' => 'admin'
+], function () {
   Route::resource('admin/users', 'Admin\UsersController');
+  Route::resource('admin/posts', 'Admin\PostsController');
 });
