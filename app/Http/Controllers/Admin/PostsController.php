@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostCreateRequest;
 use App\Photo;
@@ -27,7 +28,8 @@ class PostsController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function create() {
-    return view('admin.posts.create');
+    $categories = Category::pluck('name', 'id')->toArray();
+    return view('admin.posts.create', compact('categories'));
   }
 
   /**
@@ -49,7 +51,6 @@ class PostsController extends Controller {
       $input['photo_id'] = $photo->id;
     }
 
-    $input['category_id'] = 0;
     $user->posts()->create($input);
     return redirect('/admin/posts');
   }

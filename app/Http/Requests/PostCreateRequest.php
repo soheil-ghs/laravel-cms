@@ -22,7 +22,7 @@ class PostCreateRequest extends FormRequest {
    */
   public function rules() {
     return [
-      //'category_id' => 'required',
+      'category_id' => 'required',
       'photo' => 'required',
       'title' => 'required',
       'body' => 'required'
